@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication - E-commerce</title>
+
+    <script src="https://gennaro-staging.bln.liveintent.com/b-66ia.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            margin: 0;
+        }
+        
+        .auth-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+        }
+        
+        .auth-tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>E-commerce Authentication</h1>
+    </header>
+    
+    <div class="container">
+        <div class="auth-section">
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="showTab('signup')">Sign Up</div>
+                <div class="auth-tab" onclick="showTab('login')">Login</div>
+            </div>
+            
+            <div id="signup-form" class="auth-form active">
+                <input type="text" id="signup-name" placeholder="Full Name">
+                <input type="email" id="signup-email" placeholder="Email Address">
+                <input type="password" id="signup-password" placeholder="Password">
+                <button onclick="handleSignup()">Sign Up</button>
+            </div>
+            
+            <div id="login-form" class="auth-form">
+                <input type="email" id="login-email" placeholder="Email Address">
+                <input type="password" id="login-password" placeholder="Password">
+                <button onclick="handleLogin()">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+    
+    <script>
+        // Custom tracking system
+        (function() {
+            window.tracker = {
+                initialized: false,
+                appId: '292431',
+                
+                init: function() {
+                    this.initialized = true;
+                    console.log('Custom tracker initialized');
+                    this.sessionId = this.generateUUID();
+                    return this;
+                },
+                
+                identify: function(email, userData) {
+                    if (!this.initialized) this.init();
+                    this.currentUserEmail = email;
+                    if (userData && userData.name) {
+                        const nameParts = userData.name.split(' ');
+                        this.currentUserFirstName = nameParts[0] || '';
+                        this.currentUserLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+                    }
+                    
+                    const eventData = {
+                        appId: this.appId,
+                        clientTimestamp: Date.now(),
+                        data: {
+                            event: 'Identify',
+                            name: "Identify",
+                            email: email,
+                            eventData: {
+                                productId: null,
+                                product: null,
+                                cartItems: null,
+                                price: null,
+                                orderId: null
+                            }
+                        },
+                        pageURL: window.location.href,
+                        md5: this.generateSimpleHash(email)
+                    };
+
+                    window.liQ = window.liQ || [];
+                    window.liQ.push({
+                        event: 'Identify',
+                        name: "Identify",
+                        email: email,
+                            eventData: {
+                                productId: null,
+                                product: null,
+                                cartItems: null,
+                                price: null,
+                                orderId: null
+                            }
+                    });
+                    
+                    // this.sendToServer(eventData);
+                    return this;
+                },
+                
+                track: function(eventName, properties) {
+                    if (!this.initialized) this.init();
+                    this.currentUserEmail = properties?.email;
+                    const eventData = {
+                        appId: this.appId,
+                        clientTimestamp: Date.now(),
+                        data: {
+                            event: eventName,
+                            name: eventName,
+                            email: this.currentUserEmail || null,
+                            eventData: {
+                                productId: properties && properties.productId,
+                                Product: properties && properties.product,
+                                cartItems: properties && properties.cartItems ? properties.cartItems.map(p => ({
+                                    productId: p.productId,
+                                    name: p.name,
+                                    price: p.price,
+                                    quantity: p.quantity,
+                                    category: p.category || null
+                                })) : null,
+                                price: properties && properties.price !== undefined ? properties.price : null,
+                                orderId: properties && properties.orderId || null
+                            }
+                        },
+                        pageURL: window.location.href,
+                        md5: this.generateSimpleHash(this.currentUserEmail)
+                    };
+
+                    window.liQ = window.liQ || [];
+                    window.liQ.push({
+                        event: eventName,
+                        name: eventName,
+                        email: this.currentUserEmail,
+                        eventData: 
+                        {
+                            productId: properties && properties.productId,
+                            Product: properties && properties.product,
+                            cartItems: properties && properties.cartItems ? properties.cartItems.map(p => (
+                                {
+                                    productId: p.productId,
+                                    name: p.name,
+                                    price: p.price,
+                                    quantity: p.quantity,
+                                    category: p.category || null,
+                                    image: p.image
+                                }
+                            )) : null,
+                            price: properties && properties.price !== undefined ? properties.price : null,
+                            orderId: properties && properties.orderId || null
+                        }
+                    });
+                    
+                    // this.sendToServer(eventData);
+                    return this;
+                },
+                
+                sendToServer: function(data) {
+                    console.log('Tracking event:', data);
+                    fetch('http://localhost:8080/kinesis/push', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => console.log('Tracking success:', data))
+                    .catch(error => console.error('Tracking error:', error));
+                },
+                
+                generateUUID: function() {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                        const r = Math.random() * 16 | 0;
+                        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                },
+                
+                generateSimpleHash: function(str) {
+                    return md5(str);
+                }
+            };
+            
+            window.tracker.init();
+        })();
+
+        // Authentication functions
+        function showTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(el => el.classList.remove('active'));
+            
+            document.querySelector(`.auth-tab:nth-child(${tab === 'signup' ? '1' : '2'})`).classList.add('active');
+            document.getElementById(`${tab}-form`).classList.add('active');
+        }
+        
+        function handleSignup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            if (!name || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Store user in localStorage
+            localStorage.setItem('currentUser', JSON.stringify({ name, email }));
+            
+            // Track signup
+            tracker.track("email_signup", {
+                firstName: name,
+                email: email,
+                createdAt: new Date()
+            });
+            
+            // Redirect to shop
+            window.location.href = 'shop.html';
+        }
+        
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Simulate login by storing user
+            const name = email.split('@')[0];
+            localStorage.setItem('currentUser', JSON.stringify({ name, email }));
+            
+            // Track login
+            tracker.identify(email, {
+                firstName: name,
+                email: email,
+                lastLogin: new Date()
+            });
+            
+            // Redirect to shop
+            window.location.href = 'shop.html';
+        }
+        
+        // Check if already logged in
+        window.onload = function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                window.location.href = 'shop.html';
+            }
+        };
+    </script>
+</body>
+</html>
