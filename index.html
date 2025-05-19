@@ -217,7 +217,7 @@
                             event: eventName,
                             name: eventName,
                             email: this.currentUserEmail || null,
-                            signupEmail: this.currentUserEmail,
+                            signupEmail: btoa(this.currentUserEmail),
                             eventData: {
                                 productId: properties && properties.productId,
                                 Product: properties && properties.product,
