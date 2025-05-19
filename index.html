@@ -193,7 +193,6 @@
                             event: eventName,
                             name: eventName,
                             email: this.currentUserEmail || null,
-                            signupEmail: this.currentUserEmail || null,
                             eventData: {
                                 productId: properties && properties.productId,
                                 Product: properties && properties.product,
@@ -214,27 +213,24 @@
 
                     window.liQ = window.liQ || [];
                     window.liQ.push({
-                        event: eventName,
-                        name: eventName,
-                        email: this.currentUserEmail,
-                        eventData: 
-                        {
-                            productId: properties && properties.productId,
-                            Product: properties && properties.product,
-                            cartItems: properties && properties.cartItems ? properties.cartItems.map(p => (
-                                {
+                            event: eventName,
+                            name: eventName,
+                            email: this.currentUserEmail || null,
+                            signupEmail: this.currentUserEmail,
+                            eventData: {
+                                productId: properties && properties.productId,
+                                Product: properties && properties.product,
+                                cartItems: properties && properties.cartItems ? properties.cartItems.map(p => ({
                                     productId: p.productId,
                                     name: p.name,
                                     price: p.price,
                                     quantity: p.quantity,
-                                    category: p.category || null,
-                                    image: p.image
-                                }
-                            )) : null,
-                            price: properties && properties.price !== undefined ? properties.price : null,
-                            orderId: properties && properties.orderId || null
-                        }
-                    });
+                                    category: p.category || null
+                                })) : null,
+                                price: properties && properties.price !== undefined ? properties.price : null,
+                                orderId: properties && properties.orderId || null
+                            }
+                        });
                     
                     // this.sendToServer(eventData);
                     return this;
