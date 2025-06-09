@@ -183,7 +183,7 @@
                     return this;
                 },
                 
-                track: function(eventName, properties) {
+                track: async function(eventName, properties) {
                     if (!this.initialized) this.init();
                     this.currentUserEmail = properties?.email;
                     const eventData = {
@@ -213,7 +213,7 @@
                     };
 
                     window.liQ = window.liQ || [];
-                    window.liQ.push({
+                    await window.liQ.push({
                             event: eventName,
                             name: eventName,
                             email: this.currentUserEmail || null,
@@ -281,7 +281,7 @@
             document.getElementById(`${tab}-form`).classList.add('active');
         }
         
-        function handleSignup() {
+        async function handleSignup() {
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
@@ -295,7 +295,7 @@
             localStorage.setItem('currentUser', JSON.stringify({ name, email }));
             
             // Track signup
-            tracker.track("email_signup", {
+            await tracker.track("email_signup", {
                 firstName: name,
                 email: email,
                 createdAt: new Date()
