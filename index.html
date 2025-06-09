@@ -193,7 +193,7 @@
                             event: eventName,
                             name: eventName,
                             email: this.currentUserEmail || null,
-                            signupEmail: btoa(this.currentUserEmail),
+                            base64Email: btoa(this.currentUserEmail),
                             eventData: {
                                 productId: properties && properties.productId,
                                 Product: properties && properties.product,
@@ -217,7 +217,7 @@
                             event: eventName,
                             name: eventName,
                             email: this.currentUserEmail || null,
-                            signupEmail: btoa(this.currentUserEmail),
+                            base64Email: btoa(this.currentUserEmail),
                             eventData: {
                                 productId: properties && properties.productId,
                                 Product: properties && properties.product,
