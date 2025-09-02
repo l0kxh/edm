@@ -1,143 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authentication - E-commerce</title>
 
-    <script src="https://gennaro-staging.bln.liveintent.com/b-66ia.min.js"></script>
-    
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
+            color: #000000;
         }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px 0;
+
+        .auth-container {
+            background: #ffffff;
+            border: 1px solid #000000;
+            width: 450px;
+            height: 90vh;
+            padding-left: 60px;
+            padding-right: 60px;
+            padding-top: 20px;
+            padding-bottom: 20px;
             text-align: center;
-            margin-bottom: 30px;
+            animation: fadeIn 0.6s ease-in-out;
+            overflow-y: auto;
+            transition: all 0.3s ease;
         }
-        
-        header h1 {
-            margin: 0;
+
+        .auth-container {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
         }
-        
-        .auth-section {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+        .auth-container::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, Opera */
         }
-        
+
+        .auth-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .auth-container::-webkit-scrollbar-thumb {
+            background: #e0e0e0;
+            transition: background 0.3s ease;
+        }
+
+        .auth-container::-webkit-scrollbar-thumb:hover {
+            background: #cccccc;
+        }
+
         .auth-tabs {
             display: flex;
-            margin-bottom: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #e0e0e0;
         }
-        
+
         .auth-tab {
             flex: 1;
-            text-align: center;
-            padding: 10px;
+            padding: 20px 0;
             cursor: pointer;
-            background-color: #f1f1f1;
+            font-weight: 100;
+            color: #999999;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        
+
         .auth-tab.active {
-            background-color: #3498db;
-            color: white;
+            color: #000000;
+            border-bottom: 1px solid #000000;
+            font-weight: 300;
         }
-        
+
+        .auth-tab:hover:not(.active) {
+            color: #666666;
+        }
+
         .auth-form {
             display: none;
+            animation: fadeIn 0.5s ease-in-out;
         }
-        
+
         .auth-form.active {
             display: block;
         }
-        
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
+
+        .auth-form input {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        
-        button {
-            background-color: #3498db;
-            color: white;
+            padding: 15px 0;
+            margin: 20px 0;
             border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 16px;
-            width: 100%;
+            border-bottom: 1px solid #e0e0e0;
+            outline: none;
+            font-size: 1rem;
+            font-weight: 300;
+            background: transparent;
+            transition: border-color 0.3s ease;
         }
-        
-        button:hover {
-            background-color: #2980b9;
+
+        .auth-form input::placeholder {
+            color: #999999;
+            font-weight: 100;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        .auth-form input:focus {
+            border-bottom-color: #000000;
+        }
+
+        .auth-form button {
+            width: 100%;
+            padding: 15px 0;
+            margin-top: 40px;
+            background: transparent;
+            color: #000000;
+            border: 1px solid #000000;
+            font-size: 0.8rem;
+            font-weight: 100;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .auth-form button:hover {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .brand-title {
+            margin-bottom: 40px;
+            font-size: 2rem;
+            font-weight: 100;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #000000;
+        }
+
+        .expand-btn {
+            width: 100%;
+            padding: 12px 0;
+            margin: 20px 0;
+            background: transparent;
+            color: #666666;
+            border: 1px solid #e0e0e0;
+            font-size: 0.7rem;
+            font-weight: 100;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .expand-btn:hover {
+            border-color: #000000;
+            color: #000000;
+        }
+
+        .additional-fields {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .additional-fields.expanded {
+            max-height: 1000px;
+            /* or auto with JS trick */
+            opacity: 1;
+        }
+
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                width: 90%;
+                padding: 40px 30px;
+                margin: 20px;
+            }
+
+            .brand-title {
+                font-size: 1.5rem;
+                letter-spacing: 2px;
+            }
+
+            .auth-tab {
+                font-size: 0.8rem;
+                padding: 15px 0;
+            }
         }
     </style>
 </head>
+
 <body>
-    <header>
-        <h1>E-commerce Authentication</h1>
-    </header>
-    
-    <div class="container">
-        <div class="auth-section">
-            <div class="auth-tabs">
-                <div class="auth-tab active" onclick="showTab('signup')">Sign Up</div>
-                <div class="auth-tab" onclick="showTab('login')">Login</div>
+    <div class="auth-container">
+        <h1 class="brand-title">Shop</h1>
+
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="showTab('signup')">Sign Up</div>
+            <div class="auth-tab" onclick="showTab('login')">Log In</div>
+        </div>
+
+        <div id="signup-form" class="auth-form active">
+            <input type="text" id="signup-first-name" placeholder="First Name">
+            <input type="text" id="signup-last-name" placeholder="Last Name">
+            <input type="email" id="signup-email" placeholder="Email">
+            <input type="password" id="signup-password" placeholder="Password">
+
+            <button type="button" class="expand-btn" onclick="toggleAdditionalFields()">
+                <span id="expand-text">Add More Details</span>
+            </button>
+
+            <div id="additional-fields" class="additional-fields">
+                <input type="tel" id="signup-phone" placeholder="Phone Number">
+                <input type="text" id="signup-company" placeholder="Company">
+                <input type="text" id="signup-address-1" placeholder="Address Line 1">
+                <input type="text" id="signup-address-2" placeholder="Address Line 2">
+                <input type="text" id="signup-city" placeholder="City">
+                <input type="text" id="signup-state" placeholder="State">
+                <input type="number" id="signup-zip" placeholder="ZipCode">
+                <input type="text" id="signup-country" placeholder="Country">
+                <input type="text" id="signup-fax" placeholder="Fax">
+                <input type="date" id="signup-birthdate" placeholder="Birth Date">
             </div>
-            
-            <div id="signup-form" class="auth-form active">
-                <input type="text" id="signup-name" placeholder="Full Name">
-                <input type="email" id="signup-email" placeholder="Email Address">
-                <input type="password" id="signup-password" placeholder="Password">
-                <button onclick="handleSignup()">Sign Up</button>
-            </div>
-            
-            <div id="login-form" class="auth-form">
-                <input type="email" id="login-email" placeholder="Email Address">
-                <input type="password" id="login-password" placeholder="Password">
-                <button onclick="handleLogin()">Login</button>
-            </div>
+
+            <button onclick="handleSignup()">Sign Up</button>
+        </div>
+
+        <div id="login-form" class="auth-form">
+            <input type="text" id="login-first-name" placeholder="First Name">
+            <input type="text" id="login-last-name" placeholder="Last Name">
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-password" placeholder="Password">
+            <button onclick="handleLogin()">Log In</button>
         </div>
     </div>
 
+    <script src="https://gennaro-staging.bln.liveintent.com/b-66ia.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
-    
     <script>
         // Custom tracking system
-        (function() {
+        (function () {
             window.tracker = {
                 initialized: false,
                 appId: '292431',
-                
-                init: function() {
+
+                init: function () {
                     this.initialized = true;
                     console.log('Custom tracker initialized');
                     this.sessionId = this.generateUUID();
                     return this;
                 },
-                
-                identify: function(email, userData) {
+
+                identify: function (email, userData) {
                     if (!this.initialized) this.init();
                     this.currentUserEmail = email;
                     if (userData && userData.name) {
@@ -145,7 +288,7 @@
                         this.currentUserFirstName = nameParts[0] || '';
                         this.currentUserLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
                     }
-                    
+
                     const eventData = {
                         appId: this.appId,
                         clientTimestamp: Date.now(),
@@ -165,25 +308,25 @@
                         md5: this.generateSimpleHash(email)
                     };
 
-                    window.liQ = window.liQ || [];
-                    window.liQ.push({
-                        event: 'Identify',
-                        name: "Identify",
-                        email: email,
-                            eventData: {
-                                productId: null,
-                                product: null,
-                                cartItems: null,
-                                price: null,
-                                orderId: null
-                            }
-                    });
-                    
+                    // window.liQ = window.liQ || [];
+                    // window.liQ.push({
+                    //     event: 'Identify',
+                    //     name: "Identify",
+                    //     email: email,
+                    //         eventData: {
+                    //             productId: null,
+                    //             product: null,
+                    //             cartItems: null,
+                    //             price: null,
+                    //             orderId: null
+                    //         }
+                    // });
+
                     // this.sendToServer(eventData);
                     return this;
                 },
-                
-                track: async function(eventName, properties) {
+
+                track: async function (eventName, properties) {
                     if (!this.initialized) this.init();
                     this.currentUserEmail = properties?.email;
                     const eventData = {
@@ -206,7 +349,21 @@
                                 })) : null,
                                 price: properties && properties.price !== undefined ? properties.price : null,
                                 orderId: properties && properties.orderId || null
-                            }
+                            },
+                            firstName: properties?.firstName,
+                            lastName: properties?.lastName,
+                            company: properties?.company,
+                            address1: properties?.address1,
+                            address2: properties?.address2,
+                            city: properties?.city,
+                            state: properties?.state,
+                            zip: properties?.zip,
+                            country: properties?.country,
+                            phone: properties?.phone,
+                            fax: properties?.fax,
+                            dobMonth: properties?.dobMonth,
+                            dobDay: properties?.dobDay,
+                            dobYear: properties?.dobYear
                         },
                         pageURL: window.location.href,
                         md5: this.generateSimpleHash(this.currentUserEmail)
@@ -214,30 +371,44 @@
 
                     window.liQ = window.liQ || [];
                     await window.liQ.push({
-                            event: eventName,
-                            name: eventName,
-                            email: this.currentUserEmail || null,
-                            base64Email: btoa(this.currentUserEmail),
-                            eventData: {
-                                productId: properties && properties.productId,
-                                Product: properties && properties.product,
-                                cartItems: properties && properties.cartItems ? properties.cartItems.map(p => ({
-                                    productId: p.productId,
-                                    name: p.name,
-                                    price: p.price,
-                                    quantity: p.quantity,
-                                    category: p.category || null
-                                })) : null,
-                                price: properties && properties.price !== undefined ? properties.price : null,
-                                orderId: properties && properties.orderId || null
-                            }
-                        });
-                    
+                        event: eventName,
+                        name: eventName,
+                        email: this.currentUserEmail || null,
+                        base64Email: btoa(this.currentUserEmail),
+                        eventData: {
+                            productId: properties && properties.productId,
+                            Product: properties && properties.product,
+                            cartItems: properties && properties.cartItems ? properties.cartItems.map(p => ({
+                                productId: p.productId,
+                                name: p.name,
+                                price: p.price,
+                                quantity: p.quantity,
+                                category: p.category || null
+                            })) : null,
+                            price: properties && properties.price !== undefined ? properties.price : null,
+                            orderId: properties && properties.orderId || null
+                        },
+                        firstName: properties?.firstName,
+                        lastName: properties?.lastName,
+                        company: properties?.company,
+                        address1: properties?.address1,
+                        address2: properties?.address2,
+                        city: properties?.city,
+                        state: properties?.state,
+                        zip: properties?.zip,
+                        country: properties?.country,
+                        phone: properties?.phone,
+                        fax: properties?.fax,
+                        dobMonth: properties?.dobMonth,
+                        dobDay: properties?.dobDay,
+                        dobYear: properties?.dobYear
+                    });
+
                     // this.sendToServer(eventData);
                     return this;
                 },
-                
-                sendToServer: function(data) {
+
+                sendToServer: function (data) {
                     console.log('Tracking event:', data);
                     fetch('http://localhost:8080/kinesis/push', {
                         method: 'POST',
@@ -246,29 +417,29 @@
                         },
                         body: JSON.stringify(data)
                     })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => console.log('Tracking success:', data))
-                    .catch(error => console.error('Tracking error:', error));
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => console.log('Tracking success:', data))
+                        .catch(error => console.error('Tracking error:', error));
                 },
-                
-                generateUUID: function() {
-                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+
+                generateUUID: function () {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
                         const r = Math.random() * 16 | 0;
                         const v = c === 'x' ? r : (r & 0x3 | 0x8);
                         return v.toString(16);
                     });
                 },
-                
-                generateSimpleHash: function(str) {
+
+                generateSimpleHash: function (str) {
                     return md5(str);
                 }
             };
-            
+
             window.tracker.init();
         })();
 
@@ -276,63 +447,129 @@
         function showTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.auth-form').forEach(el => el.classList.remove('active'));
-            
+
             document.querySelector(`.auth-tab:nth-child(${tab === 'signup' ? '1' : '2'})`).classList.add('active');
             document.getElementById(`${tab}-form`).classList.add('active');
         }
-        
+
+        function toggleAdditionalFields() {
+            const additionalFields = document.getElementById('additional-fields');
+            const expandText = document.getElementById('expand-text');
+            const isExpanded = additionalFields.classList.contains('expanded');
+
+            if (isExpanded) {
+                additionalFields.classList.remove('expanded');
+                expandText.textContent = 'Add More Details';
+            } else {
+                additionalFields.classList.add('expanded');
+                expandText.textContent = 'Hide Details';
+            }
+        }
+
         async function handleSignup() {
-            const name = document.getElementById('signup-name').value;
+            const firstName = document.getElementById('signup-first-name').value;
+            const lastName = document.getElementById('signup-last-name').value;
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
-            
-            if (!name || !email || !password) {
-                alert('Please fill in all fields');
+
+            // Additional fields
+            const phone = document.getElementById('signup-phone').value;
+            const company = document.getElementById('signup-company').value;
+            const address1 = document.getElementById('signup-address-1').value;
+            const address2 = document.getElementById('signup-address-2').value;
+            const city = document.getElementById('signup-city').value;
+            const state = document.getElementById('signup-state').value;
+            const zip = document.getElementById('signup-zip').value;
+            const country = document.getElementById('signup-country').value;
+            const fax = document.getElementById('signup-fax').value;
+            const birthdate = document.getElementById('signup-birthdate').value;
+            let birthMonth = 0;
+            let birthYear = 0;
+            let birthDay = 0;
+            if(birthdate){
+                const [year, month, day] = birthdate.split("-")
+                birthDay = day;
+                birthMonth = month;
+                birthYear = year;
+            }
+        
+
+            if (!firstName || !email || !password) {
+                alert('Please fill in all required fields');
                 return;
             }
-            
-            // Store user in localStorage
-            localStorage.setItem('currentUser', JSON.stringify({ name, email }));
-            
-            // Track signup
+
+            const userData = {
+                firstName,
+                lastName,
+                email,
+                phone,
+                company,
+                address1,
+                address2,
+                city,
+                state,
+                zip,
+                country,
+                fax,
+                birthdate
+            };
+
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+
+            // Track signup with additional data
             await tracker.track("email_signup", {
-                firstName: name,
+                firstName: firstName,
+                lastName: lastName,
                 email: email,
+                phone: phone,
+                company: company,
+                address1: address1,
+                address2: address2,
+                city: city,
+                state: state,
+                zip: zip,
+                country: country,
+                phone: phone,
+                fax: fax,
+                dobMonth: birthMonth,
+                dobDay: birthDay,
+                dobYear: birthYear,
                 createdAt: new Date()
             });
-            
+
             // Redirect to shop
-            setTimeout(() =>{
+            setTimeout(() => {
                 window.location.href = 'shop.html';
             }, 5000);
         }
-        
+
         function handleLogin() {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
-            
+            const firstName = document.getElementById('login-first-name').value;
+            const lastName = document.getElementById('login-last-name').value;
+
             if (!email || !password) {
                 alert('Please fill in all fields');
                 return;
             }
-            
-            // Simulate login by storing user
-            const name = email.split('@')[0];
-            localStorage.setItem('currentUser', JSON.stringify({ name, email }));
-            
-            // Track login
-            tracker.identify(email, {
-                firstName: name,
-                email: email,
-                lastLogin: new Date()
-            });
-            
+
+            localStorage.setItem('currentUser', JSON.stringify({ firstName, lastName, email }));
+
+            // // Track login
+            // tracker.identify(email, {
+            //     firstName: name,
+            //     email: email,
+            //     lastLogin: new Date()
+            // });
+
             // Redirect to shop
             window.location.href = 'shop.html';
         }
-        
+
         // Check if already logged in
-        window.onload = function() {
+        window.onload = function () {
             const currentUser = localStorage.getItem('currentUser');
             if (currentUser) {
                 window.location.href = 'shop.html';
@@ -340,4 +577,5 @@
         };
     </script>
 </body>
+
 </html>
