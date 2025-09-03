@@ -724,7 +724,7 @@
             const oldCart = [...cart];
             cart = [];
             
-            tracker.track('Clear Cart', {
+            tracker.track('clear_cart', {
                 previousCartValue: calculateCartTotalFromItems(oldCart),
                 itemsRemoved: oldCart.length
             });
