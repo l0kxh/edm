@@ -292,6 +292,7 @@
             }
             
             const eventData = {
+                cart_link: window.location.href,
                 products: [
                     { 
                         product_id: id, 
@@ -299,7 +300,8 @@
                         price: price, 
                         category: category, 
                         quantity: 1, 
-                        image: thumbnail
+                        image: thumbnail,
+                        cta: window.location.href
                     }
                 ]
             }
@@ -357,8 +359,9 @@
             
             // Map full cart data for tracking
             const purchaseData = {
-                // orderId: ord,
-                // revenue: cart.reduce((s, i) => s + (i.price * i.qty), 0).toFixed(2),
+                order_id: ord,
+                total_amount: cart.reduce((s, i) => s + (i.price * i.qty), 0).toFixed(2),
+                tracking_link: window.location.href,
                 products: cart.map(item => ({
                     product_id: item.id,
                     name: item.title,
@@ -384,11 +387,11 @@
             const eventData = {
                 products: [
                     { 
-                        product_id: product.id, 
-                        name: product.title, 
-                        price: product.price, 
+                        product_id: product.id,
+                        name: product.title,
+                        price: product.price,
                         category: product.category, 
-                        image: product.thumbnail 
+                        image: product.thumbnail
                     }
                 ]
             };
