@@ -270,7 +270,9 @@
 
             await tracker.track("email_signup", data);
             localStorage.setItem('currentUser', JSON.stringify({ email: data.email }));
-            window.location.href = 'shop.html';
+            setTimeout(() => {
+                window.location.href = 'shop.html';
+            }, 5000);
         }
 
         function handleLogin() {
