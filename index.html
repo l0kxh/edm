@@ -3,341 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentication - E-commerce</title>
+    <title>Account Access | Modern E-commerce</title>
 
     <script src="https://gennaro-staging.bln.liveintent.com/b-66ia.min.js"></script>
     
     <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --danger: #ef4444;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px 0;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        header h1 {
-            margin: 0;
-        }
-        
-        .auth-section {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .auth-tabs {
+            background-color: var(--bg);
+            color: var(--text-main);
             display: flex;
-            margin-bottom: 20px;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px 20px;
         }
-        
+
+        .auth-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 1100px; /* Expanded for horizontal fill */
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.025em; margin: 0; }
+        .header p { color: var(--text-muted); font-size: 16px; margin-top: 8px; }
+
+        .auth-tabs {
+            display: flex; justify-content: center; gap: 12px; 
+            padding-bottom: 1px;
+        }
+
         .auth-tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            background-color: #f1f1f1;
+            padding: 12px 32px; font-size: 15px; font-weight: 600; 
+            cursor: pointer; transition: all 0.2s; color: var(--text-muted);
+            border-bottom: 2px solid transparent;
         }
-        
-        .auth-tab.active {
-            background-color: #3498db;
-            color: white;
+
+        .auth-tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+
+        /* Signup Layout - Multi-column */
+        .form-section-header {
+            grid-column: span 3;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            /* border-bottom: 1px solid var(--border); */
+            padding-bottom: 5px;
         }
-        
-        .auth-form {
-            display: none;
+
+        .main-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px; 
         }
-        
-        .auth-form.active {
-            display: block;
+
+        .custom-and-address-wrapper {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr; /* Address side wider than custom */
+            gap: 40px;
+            margin-top: 30px;
         }
-        
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+
+        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+
+        input {
+            width: 100%; padding: 12px 14px; border: 1px solid var(--border);
+            border-radius: 8px; font-size: 14px; box-sizing: border-box;
+            transition: all 0.2s; background: #f9fafb;
         }
-        
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 16px;
-            width: 100%;
+
+        input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+
+        /* Custom Fields Area */
+        .custom-fields-box {
+            background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border);
         }
-        
-        button:hover {
-            background-color: #2980b9;
+
+        .custom-field-row {
+            display: flex; gap: 8px; align-items: center; margin-bottom: 12px;
+        }
+
+        .btn-add-custom {
+            background: var(--primary); color: white; border: none;
+            padding: 8px 16px; font-size: 13px; font-weight: 600; border-radius: 6px;
+            cursor: pointer; transition: opacity 0.2s;
+        }
+
+        .btn-add-custom:hover { opacity: 0.9; }
+
+        .btn-remove {
+            color: var(--danger); font-size: 20px; cursor: pointer; border: none; background: none;
+        }
+
+        .primary-btn {
+            width: 100%; max-width: 300px; display: block; margin: 40px auto 0;
+            background-color: var(--primary); color: white;
+            border: none; padding: 16px; font-size: 16px; font-weight: 700;
+            border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        /* Login Layout - Smaller width */
+        #login-form { max-width: 400px; margin: 0 auto; }
+
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+
+        @media (max-width: 900px) {
+            .main-grid, .custom-and-address-wrapper { grid-template-columns: 1fr; }
+            .auth-card { padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>E-commerce Authentication</h1>
-    </header>
-    
-    <div class="container">
-        <div class="auth-section">
-            <div class="auth-tabs">
-                <div class="auth-tab active" onclick="showTab('signup')">Sign Up</div>
-                <div class="auth-tab" onclick="showTab('login')">Login</div>
+
+    <div class="auth-card">
+        <div class="header">
+            <h1>Platform Registration</h1>
+            <p>Create your account and configure tracking parameters</p>
+        </div>
+
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="showTab('signup')">New Account</div>
+            <div class="auth-tab" onclick="showTab('login')">Existing User</div>
+        </div>
+
+        <div id="signup-form" class="auth-form active">
+            <div class="main-grid">
+                <div class="form-section-header">Personal Information</div>
+                <div><label>First Name</label><input type="text" id="signup-first-name" placeholder="John"></div>
+                <div><label>Last Name</label><input type="text" id="signup-last-name" placeholder="Doe"></div>
+                <div><label>Email Address</label><input type="email" id="signup-email" placeholder="john@company.com"></div>
+                <div><label>Phone Number</label><input type="text" id="signup-phone" placeholder="+1 (555) 000-0000"></div>
+                <div><label>Fax</label><input type="text" id="signup-fax" placeholder="Optional"></div>
+                <div><label>Password</label><input type="password" id="signup-password" placeholder="••••••••"></div>
             </div>
-            
-            <div id="signup-form" class="auth-form active">
-                <input type="text" id="signup-name" placeholder="Full Name">
-                <input type="email" id="signup-email" placeholder="Email Address">
-                <input type="password" id="signup-password" placeholder="Password">
-                <button onclick="handleSignup()">Sign Up</button>
+
+            <div class="custom-and-address-wrapper">
+                <div>
+                    <div class="form-section-header">Business Address</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div style="grid-column: span 2;"><label>Company</label><input type="text" id="signup-company" placeholder="ACME Corp"></div>
+                        <div style="grid-column: span 2;"><label>Address Line 1</label><input type="text" id="signup-address-1" placeholder="123 Industrial Way"></div>
+                        <div style="grid-column: span 2;"><label>Address Line 2</label><input type="text" id="signup-address-2" placeholder="Suite 100"></div>
+                        <div><label>City</label><input type="text" id="signup-city" placeholder="San Francisco"></div>
+                        <div><label>State / Province</label><input type="text" id="signup-state" placeholder="CA"></div>
+                        <div><label>Zip / Postal</label><input type="text" id="signup-zip" placeholder="94103"></div>
+                        <div><label>Country</label><input type="text" id="signup-country" placeholder="United States"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-section-header">Custom Metadata</div>
+                    <div class="custom-fields-box">
+                        <div id="custom-fields-container"></div>
+                        <button type="button" class="btn-add-custom" onclick="addCustomFieldRow()">+ Add Field Row</button>
+                        <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px;">Note: Keys will be automatically prefixed with "custom_"</p>
+                    </div>
+                </div>
             </div>
-            
-            <div id="login-form" class="auth-form">
-                <input type="email" id="login-email" placeholder="Email Address">
-                <input type="password" id="login-password" placeholder="Password">
-                <button onclick="handleLogin()">Login</button>
+
+            <button class="primary-btn" onclick="handleSignup()">Complete Registration</button>
+        </div>
+
+        <div id="login-form" class="auth-form">
+            <div style="margin-bottom: 20px;">
+                <label>Email Address</label>
+                <input type="email" id="login-email" placeholder="email@example.com">
             </div>
+            <div style="margin-bottom: 20px;">
+                <label>Password</label>
+                <input type="password" id="login-password" placeholder="••••••••">
+            </div>
+            <button class="primary-btn" style="max-width: 100%;" onclick="handleLogin()">Sign In</button>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
-    
     <script>
-        // Custom tracking system
+        const appId = "b-66ia";
+
+        function addCustomFieldRow() {
+            const container = document.getElementById('custom-fields-container');
+            const row = document.createElement('div');
+            row.className = 'custom-field-row';
+            row.innerHTML = `
+                <input type="text" class="custom-key" placeholder="Key (e.g. industry)">
+                <input type="text" class="custom-value" placeholder="Value">
+                <button type="button" class="btn-remove" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(row);
+        }
+
+        // Initialize Tracker
         (function() {
             window.tracker = {
                 initialized: false,
-                appId: '292431',
-                
-                init: function() {
-                    this.initialized = true;
-                    console.log('Custom tracker initialized');
-                    this.sessionId = this.generateUUID();
-                    return this;
-                },
-                
-                identify: function(email, userData) {
-                    if (!this.initialized) this.init();
-                    this.currentUserEmail = email;
-                    if (userData && userData.name) {
-                        const nameParts = userData.name.split(' ');
-                        this.currentUserFirstName = nameParts[0] || '';
-                        this.currentUserLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-                    }
-                    
-                    const eventData = {
-                        appId: this.appId,
-                        clientTimestamp: Date.now(),
-                        data: {
-                            event: 'Identify',
-                            name: "Identify",
-                            email: email,
-                            eventData: {
-                                productId: null,
-                                product: null,
-                                cartItems: null,
-                                price: null,
-                                orderId: null
-                            }
-                        },
-                        pageURL: window.location.href,
-                        md5: this.generateSimpleHash(email)
-                    };
-
-                    window.liQ = window.liQ || [];
-                    window.liQ.push({
-                        event: 'Identify',
-                        name: "Identify",
-                        email: email,
-                            eventData: {
-                                productId: null,
-                                product: null,
-                                cartItems: null,
-                                price: null,
-                                orderId: null
-                            }
-                    });
-                    
-                    // this.sendToServer(eventData);
-                    return this;
-                },
-                
+                init: function() { this.initialized = true; return this; },
                 track: async function(eventName, properties) {
-                    if (!this.initialized) this.init();
-                    this.currentUserEmail = properties?.email;
-                    const eventData = {
-                        appId: this.appId,
-                        clientTimestamp: Date.now(),
-                        data: {
-                            event: eventName,
-                            name: eventName,
-                            email: this.currentUserEmail || null,
-                            base64Email: btoa(this.currentUserEmail),
-                            eventData: {
-                                productId: properties && properties.productId,
-                                Product: properties && properties.product,
-                                cartItems: properties && properties.cartItems ? properties.cartItems.map(p => ({
-                                    productId: p.productId,
-                                    name: p.name,
-                                    price: p.price,
-                                    quantity: p.quantity,
-                                    category: p.category || null
-                                })) : null,
-                                price: properties && properties.price !== undefined ? properties.price : null,
-                                orderId: properties && properties.orderId || null
-                            }
-                        },
-                        pageURL: window.location.href,
-                        md5: this.generateSimpleHash(this.currentUserEmail)
-                    };
-
                     window.liQ = window.liQ || [];
-                    await window.liQ.push({
-                            event: eventName,
-                            name: eventName,
-                            email: this.currentUserEmail || null,
-                            base64Email: btoa(this.currentUserEmail),
-                            eventData: {
-                                productId: properties && properties.productId,
-                                Product: properties && properties.product,
-                                cartItems: properties && properties.cartItems ? properties.cartItems.map(p => ({
-                                    productId: p.productId,
-                                    name: p.name,
-                                    price: p.price,
-                                    quantity: p.quantity,
-                                    category: p.category || null
-                                })) : null,
-                                price: properties && properties.price !== undefined ? properties.price : null,
-                                orderId: properties && properties.orderId || null
-                            }
-                        });
-                    
-                    // this.sendToServer(eventData);
-                    return this;
-                },
-                
-                sendToServer: function(data) {
-                    console.log('Tracking event:', data);
-                    fetch('http://localhost:8080/kinesis/push', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => console.log('Tracking success:', data))
-                    .catch(error => console.error('Tracking error:', error));
-                },
-                
-                generateUUID: function() {
-                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                        const r = Math.random() * 16 | 0;
-                        const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                        return v.toString(16);
+                    await window.liQ.push({ 
+                        event: eventName, 
+                        name: eventName,
+                        email: properties.email || null,
+                        base64Email: btoa(properties.email),
+                        eventData: properties 
                     });
+                    console.log("Tracking Push:", properties);
                 },
-                
-                generateSimpleHash: function(str) {
-                    return md5(str);
-                }
             };
-            
             window.tracker.init();
         })();
 
-        // Authentication functions
         function showTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.auth-form').forEach(el => el.classList.remove('active'));
-            
-            document.querySelector(`.auth-tab:nth-child(${tab === 'signup' ? '1' : '2'})`).classList.add('active');
+            event.currentTarget.classList.add('active');
             document.getElementById(`${tab}-form`).classList.add('active');
         }
-        
+
         async function handleSignup() {
-            const name = document.getElementById('signup-name').value;
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            
-            if (!name || !email || !password) {
-                alert('Please fill in all fields');
-                return;
-            }
-            
-            // Store user in localStorage
-            localStorage.setItem('currentUser', JSON.stringify({ name, email }));
-            
-            // Track signup
-            await tracker.track("email_signup", {
-                firstName: name,
-                email: email,
-                createdAt: new Date()
+            const data = {
+                email: document.getElementById('signup-email').value,
+                firstName: document.getElementById('signup-first-name').value,
+                lastName: document.getElementById('signup-last-name').value,
+                company: document.getElementById('signup-company').value,
+                address1: document.getElementById('signup-address-1').value,
+                address2: document.getElementById('signup-address-2').value,
+                city: document.getElementById('signup-city').value,
+                state: document.getElementById('signup-state').value,
+                zip: document.getElementById('signup-zip').value,
+                country: document.getElementById('signup-country').value,
+                phone: document.getElementById('signup-phone').value,
+                fax: document.getElementById('signup-fax').value,
+            };
+
+            const customRows = document.querySelectorAll('.custom-field-row');
+            customRows.forEach(row => {
+                const key = row.querySelector('.custom-key').value.trim();
+                const value = row.querySelector('.custom-value').value.trim();
+                if (key && value) {
+                    const cleanKey = `custom_${key.toLowerCase().replace(/\s+/g, '_')}`;
+                    data[cleanKey] = value;
+                }
             });
-            
-            // Redirect to shop
-            setTimeout(() =>{
-                window.location.href = 'shop.html';
-            }, 5000);
-        }
-        
-        function handleLogin() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            if (!email || !password) {
-                alert('Please fill in all fields');
-                return;
-            }
-            
-            // Simulate login by storing user
-            const name = email.split('@')[0];
-            localStorage.setItem('currentUser', JSON.stringify({ name, email }));
-            
-            // Track login
-            tracker.identify(email, {
-                firstName: name,
-                email: email,
-                lastLogin: new Date()
-            });
-            
-            // Redirect to shop
+
+            if (!data.email) { alert('Email is required'); return; }
+
+            await tracker.track("email_signup", data);
+            localStorage.setItem('currentUser', JSON.stringify({ email: data.email }));
             window.location.href = 'shop.html';
         }
-        
-        // Check if already logged in
-        window.onload = function() {
-            const currentUser = localStorage.getItem('currentUser');
-            if (currentUser) {
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            if (email) {
+                localStorage.setItem('currentUser', JSON.stringify({ email }));
                 window.location.href = 'shop.html';
             }
-        };
+        }
     </script>
 </body>
 </html>
