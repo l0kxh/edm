@@ -295,11 +295,11 @@
                 products: [
                     { 
                         product_id: id, 
-                        name: title, 
+                        title: title, 
                         price: price, 
                         category: category, 
                         quantity: 1, 
-                        image: thumbnail
+                        imageUrl: thumbnail
                     }
                 ]
             }
@@ -360,11 +360,11 @@
                 // revenue: cart.reduce((s, i) => s + (i.price * i.qty), 0).toFixed(2),
                 products: cart.map(item => ({
                     product_id: item.id,
-                    name: item.title,
+                    title: item.title,
                     price: item.price,
                     quantity: item.qty,
                     category: item.category,
-                    image: item.thumbnail
+                    imageUrl: item.thumbnail
                 }))
             };
 
@@ -384,10 +384,10 @@
                 products: [
                     { 
                         product_id: product.id, 
-                        name: product.title, 
+                        title: product.title, 
                         price: product.price, 
                         category: product.category, 
-                        image: product.thumbnail 
+                        imageUrl: product.thumbnail 
                     }
                 ]
             };
