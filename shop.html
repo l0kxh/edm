@@ -231,8 +231,10 @@
                         event: eventName,
                         name: eventName,
                         email: this.email,
-                        eventData: props
+                        eventData: props,
+                        customerKey: JSON.parse(localStorage.getItem('customerKey'))
                     }
+                    console.log("Pushed data: {}", data);
                     window.liQ = window.liQ || [];
                     window.liQ.push(data);
                     return this;

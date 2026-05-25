@@ -225,7 +225,8 @@
                         name: eventName,
                         email: properties.email || null,
                         base64Email: btoa(properties.email),
-                        eventData: properties 
+                        eventData: properties,
+                        customerKey: JSON.parse(localStorage.getItem('customerKey'))
                     });
                     console.log("Tracking Push:", properties);
                 },
@@ -241,6 +242,10 @@
         }
 
         async function handleSignup() {
+            const email = document.getElementById('signup-email').value;
+
+            const customerKey = generateCustomerKey(email);
+            
             const data = {
                 email: document.getElementById('signup-email').value,
                 firstName: document.getElementById('signup-first-name').value,
@@ -254,6 +259,7 @@
                 country: document.getElementById('signup-country').value,
                 phone: document.getElementById('signup-phone').value,
                 fax: document.getElementById('signup-fax').value,
+                customerKey
             };
 
             const customRows = document.querySelectorAll('.custom-field-row');
@@ -270,6 +276,7 @@
 
             await tracker.track("email_signup", data);
             localStorage.setItem('currentUser', JSON.stringify({ email: data.email }));
+            localStorage.setItem('customerKey', JSON.stringify(customerKey));
             setTimeout(() => {
                 window.location.href = 'shop.html';
             }, 5000);
@@ -277,10 +284,32 @@
 
         function handleLogin() {
             const email = document.getElementById('login-email').value;
+
+            const customerKey = generateCustomerKey(email);
+            
             if (email) {
                 localStorage.setItem('currentUser', JSON.stringify({ email }));
+                localStorage.setItem('customerKey', JSON.stringify(customerKey));
                 window.location.href = 'shop.html';
             }
+        }
+
+
+        function generateCustomerKey(email) {
+            const cleanEmail = email.trim().toLowerCase();
+
+            // 64-bit FNV-1a constants using BigInt (n suffix)
+            let hash = 14695981039346656037n; // FNV offset basis
+            const prime = 1099511628211n;     // FNV prime
+
+            for (let i = 0; i < cleanEmail.length; i++) {
+                // XOR the bottom 8 bits with the character code
+                hash ^= BigInt(cleanEmail.charCodeAt(i));
+                // Multiply by the 64-bit prime
+                hash = (hash * prime) & 0xFFFFFFFFFFFFFFFFn; // Keep it strictly 64-bit
+            }
+
+            return hash.toString();
         }
     </script>
 </body>
