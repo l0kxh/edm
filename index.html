@@ -226,7 +226,7 @@
                         email: properties.email || null,
                         base64Email: btoa(properties.email),
                         eventData: properties,
-                        customerKey: JSON.parse(localStorage.getItem('customerKey'))
+                        customerKey: properties?.customerKey ?? JSON.parse(localStorage.getItem('customerKey'))
                     });
                     console.log("Tracking Push:", properties);
                 },
